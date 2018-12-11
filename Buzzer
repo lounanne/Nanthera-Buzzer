@@ -1,0 +1,38 @@
+#include "Ultrasonic.h"
+
+// Defind pins
+const uint8_t trigger_pin = 8;
+const uint8_t echo_pin = 9;
+const uint8_t vibrate_pin = 10;
+
+// Define global variables
+ultrasonic_t ultrasonic;
+
+void setup()
+{
+    // Open serial for debugging purpose
+    Serial.begin(9600);
+
+    // Initialize ultrasonic
+    ultrasonic.trig_pin = trigger_pin;
+    ultrasonic.echo_pin = echo_pin;
+    ultrasonic_initialize(&ultrasonic);
+
+    // Intialize vibrate motor
+    pinMode(vibrate_pin, OUTPUT);
+    digitalWrite(vibrate_pin, LOW);
+}
+
+void loop() 
+{
+    if (ultrasonic_ranging_cm(&ultrasonic) <= 50)
+    {
+        // Enable vibrate mottor
+        digitalWrite(vibrate_pin, HIGH);
+    }
+    else 
+    {
+        // Disable vibrate mottor
+        digitalWrite(vibrate_pin, LOW);
+    }
+}
